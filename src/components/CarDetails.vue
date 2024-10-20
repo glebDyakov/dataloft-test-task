@@ -191,31 +191,6 @@ const openMenu = () => {
   flex-grow: 1;
 }
 
-/* Меню (три точки) */
-.menu-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 10px;
-}
-
-.menu-button:hover {
-  color: #007bff;
-}
-
-
-.menu-button svg {
-  width: 32px;
-  height: 32px;
-  stroke: #333; /* Цвет иконки */
-}
-
-.menu-button:hover svg {
-  stroke: #007bff; /* Изменение цвета при наведении */
-}
-
 /* Изображение автомобиля на всю ширину экрана */
 .car-image-container {
   width: 100vw; /* Ширина экрана */
@@ -275,24 +250,6 @@ const openMenu = () => {
   margin: 0;
 }
 
-.back-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.back-button svg {
-  width: 32px;
-  height: 32px;
-  stroke: black; /* Синий цвет линии */
-  fill: none; /* Убедитесь, что внутри круга нет заливки */
-}
-
-.back-button:hover svg {
-  stroke: #007bff; /* Изменение цвета при наведении */
-}
-
 .posts {
   margin-top: 20px;
 }
@@ -322,28 +279,6 @@ const openMenu = () => {
 .post-info {
   font-size: 14px;
   color: #666;
-}
-
-.post-actions {
-  display: flex;
-  align-items: center;
-}
-
-.post-comments, .post-likes {
-  display: flex;
-  align-items: center;
-  margin-left: 15px;
-}
-
-.post-comments svg, .post-likes svg {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-}
-
-.post-comments span, .post-likes span {
-  font-size: 14px;
-  color: #333;
 }
 
 .post-image {
