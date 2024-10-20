@@ -73,10 +73,6 @@ const posts = ref([
   },
 ])
 
-const goBack = () => {
-  this.$router.go(-1)
-}
-
 const openMenu = () => {
   // TODO: Здесь можно реализовать логику для меню
 }
@@ -86,7 +82,7 @@ const openMenu = () => {
   <div>
     <!-- Шапка с кнопкой назад, тайтлом и меню -->
     <header class="header">
-      <button class="back-button" @click="goBack">
+      <button class="back-button" @click="$router.go(-1)">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"

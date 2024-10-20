@@ -35,17 +35,13 @@ const comments = ref([
   { id: 1, text: 'Great post!' },
   { id: 2, text: 'Very informative.' },
 ])
-
-const goBack = () => {
-  this.$router.go(-1)
-}
 </script>
 
 <template>
   <div class="post-details">
     <!-- Шапка с кнопкой назад, заголовком и меню -->
     <div class="post-header">
-      <button class="back-button" @click="goBack">
+      <button class="back-button" @click="$router.go(-1)">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12 8 8 12 12 16"></polyline>
