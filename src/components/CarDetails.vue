@@ -133,39 +133,42 @@ const openMenu = () => {
     </div>
     <div class="posts">
       <div v-for="post in entity.car.posts" :key="post.id" class="post-card">
-        <!-- Блок с картинкой -->
-        <div class="post-image-container">
-          <img :src="post.image" alt="Car image" class="post-image" />
-        </div>
-        <!-- Информационный блок о посте -->
-        <div class="post-info-block">
-          <div class="post-seller-info">
-            <img :src="post.seller.avatar" alt="Seller Avatar" class="seller-avatar" />
-            <div class="seller-details">
-              <span class="post-seller-name">{{ post.seller.name }}</span>
-              <span class="post-car-model">{{ post.carModel }}</span>
+        <!-- <router-link :to="{ name: 'PostDetails', params: { id: post.id } }" class="post-link"> -->
+        <router-link :to="`/post/${post.id}`" class="post-link">
+          <!-- Блок с картинкой -->
+          <div class="post-image-container">
+            <img :src="post.image" alt="Car image" class="post-image" />
+          </div>
+          <!-- Информационный блок о посте -->
+          <div class="post-info-block">
+            <div class="post-seller-info">
+              <img :src="post.seller.avatar" alt="Seller Avatar" class="seller-avatar" />
+              <div class="seller-details">
+                <span class="post-seller-name">{{ post.seller.name }}</span>
+                <span class="post-car-model">{{ post.carModel }}</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="post-footer">
-          <div class="post-info">
-            <span class="post-date">{{ post.date }}</span>
-          </div>
-          <div class="post-actions">
-            <div class="post-comments">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle">
-                <path d="M21 11.5a8.38 8.38 0 0 1-1.3 4.4 8.5 8.5 0 0 1-7.7 4.6 8.38 8.38 0 0 1-4.4-1.3L3 21l1.8-4.6a8.38 8.38 0 0 1-1.3-4.4 8.5 8.5 0 0 1 4.6-7.7 8.38 8.38 0 0 1 4.4-1.3 8.5 8.5 0 0 1 8.5 8.5z"></path>
-              </svg>
-              <span>{{ post.commentsCount }} Комментариев</span>
+          <div class="post-footer">
+            <div class="post-info">
+              <span class="post-date">{{ post.date }}</span>
             </div>
-            <div class="post-likes">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feather feather-heart-filled">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-              </svg>
-              <span>{{ post.likesCount }} Лайков</span>
+            <div class="post-actions">
+              <div class="post-comments">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-1.3 4.4 8.5 8.5 0 0 1-7.7 4.6 8.38 8.38 0 0 1-4.4-1.3L3 21l1.8-4.6a8.38 8.38 0 0 1-1.3-4.4 8.5 8.5 0 0 1 4.6-7.7 8.38 8.38 0 0 1 4.4-1.3 8.5 8.5 0 0 1 8.5 8.5z"></path>
+                </svg>
+                <span>{{ post.commentsCount }} Комментариев</span>
+              </div>
+              <div class="post-likes">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feather feather-heart-filled">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                </svg>
+                <span>{{ post.likesCount }} Лайков</span>
+              </div>
             </div>
           </div>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
