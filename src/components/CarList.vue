@@ -1,30 +1,36 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios'
 
-const cars = ref([
-  { id: 1, name: 'BMW', model: 'X5', brand: 'BMW', image: 'https://via.placeholder.com/300x200?text=BMW%20X5' },
-  { id: 2, name: 'Audi', model: 'A6', brand: 'Audi', image: 'https://via.placeholder.com/300x200?text=Audi%20A6' },
-  { id: 3, name: 'BMW', model: 'X3', brand: 'BMW', image: 'https://via.placeholder.com/300x200?text=BMW%20X3' },
-  { id: 4, name: 'Mercedes', model: 'C-Class', brand: 'Mercedes', image: 'https://via.placeholder.com/300x200?text=Mercedes%20C-Class' },
-  { id: 5, name: 'Audi', model: 'Q7', brand: 'Audi', image: 'https://via.placeholder.com/300x200?text=Audi%20Q7' }
-])
+const cars = ref([])
 
 const selectedBrand = ref(null)
 
 const uniqueBrands = computed(() => {
-  const brands = cars.value.map(car => car.name)
+  const brands = cars.value.map(car => car.brand_name)
   return [...new Set(brands)] // remove duplicates
 })
 
 const filteredCars = computed(() => {
   if (selectedBrand.value === null) return cars.value
-  return cars.value.filter(car => car.name === selectedBrand.value);
+  return cars.value.filter(car => car.brand_name === selectedBrand.value);
 })
 
 const filterByBrand = (brand) => {
   if (selectedBrand.value && brand === selectedBrand.value) selectedBrand.value = null
   else selectedBrand.value = brand
 }
+
+const fetchCars = async () => {
+  try {
+    const response = await axios.get('https://am111.05.testing.place/api/v1/cars/list')
+    cars.value = response.data // assuming the car data is in response.data.data
+  } catch (error) {
+    console.error('Error fetching cars:', error);
+  }
+}
+
+onMounted(() => fetchCars())
 </script>
 
 <template>
