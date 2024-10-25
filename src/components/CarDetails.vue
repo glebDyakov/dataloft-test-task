@@ -1,44 +1,34 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { useStore } from 'vuex'
 
-const entity = ref({
-  car: null,
-  author: null,
-})
+const store = useStore()
 
-const isLoading = ref(true)
+const entity = computed(() => store.getters.carDetails)
+
+const isLoading = computed(() => store.getters.isLoading);
 
 const openMenu = () => {
   // TODO: Здесь можно реализовать логику для меню
 }
 
 const fetchCarDetails = async () => {
-  const carId = useRoute().params.id; // Получаем ID машины из параметра маршрута
+  const carId = useRoute().params.id // Получаем ID машины из параметра маршрута
   try {
-    const response = await axios.get(`http://am111.05.testing.place/api/v1/car/${carId}`);
+    const response = await axios.get(`http://am111.05.testing.place/api/v1/car/${carId}`)
     entity.value.car = response.data.car // Предполагается, что данные машины находятся в response.data.data
     entity.value.seller = response.data.user // Предполагается, что данные машины находятся в response.data.data
-    isLoading.value = false
   } catch (error) {
-    console.error('Error fetching car details:', error);
-  }
-}
-
-const fetchCarPosts = async () => {
-  const carId = useRoute().params.id;
-  try {
-    const response = await axios.get(`http://am111.05.testing.place/api/v1/car/${carId}/posts`);
-    entity.value.car.posts = response.data.posts; // Данные постов
-  } catch (error) {
-    console.error('Error fetching car posts:', error);
+    console.error('Error fetching car details:', error)
   }
 }
 
 onMounted(() => {
-  fetchCarDetails()
-  fetchCarPosts()
+  const carId = useRoute().params.id
+  store.dispatch('fetchCarDetails', carId)
+  store.dispatch('fetchCarPosts', carId)
 })
 </script>
 
@@ -66,7 +56,7 @@ onMounted(() => {
             <line x1="16" y1="12" x2="8" y2="12"></line>
           </svg>
         </button>
-        <h1 class="title">{{ entity.car?.brand_name }} {{ entity.car?.model_name }}</h1>
+        <h1 class="title">{{ entity?.car?.brand_name }} {{ entity?.car?.model_name }}</h1>
         <div class="menu">
           <button class="menu-button" @click="openMenu">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal">
@@ -79,24 +69,24 @@ onMounted(() => {
       </header>
       <!-- Изображение на всю ширину экрана -->
       <div class="car-image-container mb-4">
-        <img :src="entity.car?.images[0]?.url ?? ''" :alt="`${entity.car?.brand_name} ${entity.car?.model_name	}`" class="car-image-fullwidth" />
+        <img :src="entity?.car?.images[0]?.url ?? ''" :alt="`${entity?.car?.brand_name} ${entity?.car?.model_name	}`" class="car-image-fullwidth" />
       </div>
       <div class="container mb-4">
         <div class="car-info">
           <div class="seller-info">
-            <img :src="entity.seller?.avatar.url" alt="Avatar" class="seller-avatar">
+            <img :src="entity?.seller?.avatar.url" alt="Avatar" class="seller-avatar">
             <div class="seller-details">
-              <p class="seller-nickname">{{ entity.author?.username }}</p>
-              <p class="seller-car-model">{{ entity.car?.brand_name }} {{ entity.car?.model_name }}</p>
+              <p class="seller-nickname">{{ entity?.author?.username }}</p>
+              <p class="seller-car-model">{{ entity?.car?.brand_name }} {{ entity?.car?.model_name }}</p>
             </div>
           </div>
-          <p><strong>{{ entity.car?.model_name }}</strong></p>
-          <p>{{ entity.car?.engine_name }} · {{ entity.car?.year }}</p>
-          <p>{{ entity.car?.place_name	 }}</p>
+          <p><strong>{{ entity?.car?.model_name }}</strong></p>
+          <p>{{ entity?.car?.engine_name }} · {{ entity?.car?.year }}</p>
+          <p>{{ entity?.car?.place_name	 }}</p>
         </div>
       </div>
       <div class="posts">
-        <div v-for="post in entity.car?.posts" :key="post.id" class="post-card">
+        <div v-for="post in entity?.car?.posts" :key="post.id" class="post-card">
           <router-link :to="`/post/${post.id}`" class="post-link">
             <div class="post-image-container">
               <img :src="post.img" alt="Car image" class="post-image" />
@@ -105,8 +95,8 @@ onMounted(() => {
               <div class="post-seller-info">
                 <img :src="post.author.avatar.url" alt="Seller Avatar" class="seller-avatar" />
                 <div class="seller-details">
-                  <span class="post-seller-name">{{ entity.car?.brand_name }}</span>
-                  <span class="post-car-model">{{ entity.car?.model_name }}</span>
+                  <span class="post-seller-name">{{ entity?.car?.brand_name }}</span>
+                  <span class="post-car-model">{{ entity?.car?.model_name }}</span>
                 </div>
               </div>
             </div>

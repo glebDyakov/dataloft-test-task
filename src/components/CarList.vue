@@ -26,16 +26,6 @@ const filterByBrand = (brand) => {
   else selectedBrand.value = brand
 }
 
-const fetchCars = async () => {
-  try {
-    const response = await axios.get('https://am111.05.testing.place/api/v1/cars/list')
-    cars.value = response.data // assuming the car data is in response.data.data
-    isLoading.value = false
-  } catch (error) {
-    console.error('Error fetching cars:', error)
-  }
-}
-
 onMounted(() => store.dispatch('fetchCarList'))
 </script>
 
