@@ -1,10 +1,13 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
+import { useStore } from 'vuex'
 
-const cars = ref([])
+const store = useStore()
 
-const isLoading = ref(true)
+const cars = computed(() => store.getters.cars)
+
+const isLoading = computed(() => store.getters.isLoading);
 
 const selectedBrand = ref(null)
 
@@ -33,7 +36,7 @@ const fetchCars = async () => {
   }
 }
 
-onMounted(() => fetchCars())
+onMounted(() => store.dispatch('fetchCarList'))
 </script>
 
 <template>
