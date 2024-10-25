@@ -106,13 +106,4 @@ onMounted(() => fetchCars())
   border: none; /* Убираем границы */
   margin: 0 5px; /* Отступы между табами */
 }
-
-.loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-size: 18px;
-  color: #666;
-}
 </style>

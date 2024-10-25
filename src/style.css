@@ -65,3 +65,12 @@
 .menu-button:hover svg {
   stroke: #007bff; /* Изменение цвета при наведении */
 }
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  color: #666;
+}
