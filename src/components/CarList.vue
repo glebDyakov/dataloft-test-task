@@ -4,6 +4,8 @@ import axios from 'axios'
 
 const cars = ref([])
 
+const isLoading = ref(true)
+
 const selectedBrand = ref(null)
 
 const uniqueBrands = computed(() => {
@@ -25,8 +27,9 @@ const fetchCars = async () => {
   try {
     const response = await axios.get('https://am111.05.testing.place/api/v1/cars/list')
     cars.value = response.data // assuming the car data is in response.data.data
+    isLoading.value = false
   } catch (error) {
-    console.error('Error fetching cars:', error);
+    console.error('Error fetching cars:', error)
   }
 }
 
@@ -34,40 +37,45 @@ onMounted(() => fetchCars())
 </script>
 
 <template>
-  <div class="container">
-    <div class="my-4">
-      <h3 class="text-secondary">Выберите марку</h3>
+  <div>
+    <div v-if="isLoading" class="loader">
+      <div class="spinner-border text-primary" role="status" />
     </div>
-    <hr />
-    <div class="mb-4">
-      <ul class="nav nav-pills">
-        <li class="nav-item" v-for="brand in uniqueBrands" :key="brand">
-          <button
-            class="nav-link tab-button"
-            :class="{ active: selectedBrand === brand }"
-            @click="filterByBrand(brand)"
-          >
-            {{ brand }}
-          </button>
-        </li>
-      </ul>
-    </div>
-    <hr />
-    <div class="mb-4">
-      <h3 class="text-secondary">Место нахождения: любое</h3>
-    </div>
-    <div class="car-grid">
-      <div 
-        v-for="car in filteredCars" 
-        :key="car.id" 
-        class="car-item clickable"
-        @click="$router.push(`/car/${car.id}`)"
-      >
-        <img 
-          :src="car.image" 
-          :alt="`${car.name} ${car.model}`" 
-          class="img-fluid car-image"
-        />
+    <div v-else class="container">
+      <div class="my-4">
+        <h3 class="text-secondary">Выберите марку</h3>
+      </div>
+      <hr />
+      <div class="mb-4">
+        <ul class="nav nav-pills">
+          <li class="nav-item" v-for="brand in uniqueBrands" :key="brand">
+            <button
+              class="nav-link tab-button"
+              :class="{ active: selectedBrand === brand }"
+              @click="filterByBrand(brand)"
+            >
+              {{ brand }}
+            </button>
+          </li>
+        </ul>
+      </div>
+      <hr />
+      <div class="mb-4">
+        <h3 class="text-secondary">Место нахождения: любое</h3>
+      </div>
+      <div class="car-grid">
+        <div 
+          v-for="car in filteredCars" 
+          :key="car.id" 
+          class="car-item clickable"
+          @click="$router.push(`/car/${car.id}`)"
+        >
+          <img 
+            :src="car.image" 
+            :alt="`${car.name} ${car.model}`" 
+            class="img-fluid car-image"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -97,5 +105,14 @@ onMounted(() => fetchCars())
   color: #ccc; /* Тёмный текст */
   border: none; /* Убираем границы */
   margin: 0 5px; /* Отступы между табами */
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+  color: #666;
 }
 </style>
