@@ -5,6 +5,7 @@ export default createStore({
   state: {
     cars: [],
     carDetails: null,
+    postDetails: null,
     isLoading: false,
   },
   mutations: {
@@ -16,6 +17,9 @@ export default createStore({
     },
     SET_LOADING(state, isLoading) {
       state.isLoading = isLoading
+    },
+    SET_POST_DETAILS(state, postDetails) {
+      state.postDetails = postDetails;
     },
   },
   actions: {
@@ -58,10 +62,25 @@ export default createStore({
         console.error('Error fetching car details:', error)
       }
     },
+    async fetchPostDetails({ commit }, postId) {
+      commit('SET_LOADING', true);
+      try {
+        const response = await axios.get(`http://am111.05.testing.place/api/v1/post/${postId}`);
+        commit('SET_POST_DETAILS', {
+          ...response.data.post,
+          comments: response.data.comments,
+        });
+      } catch (error) {
+        console.error('Error fetching post details:', error);
+      } finally {
+        commit('SET_LOADING', false);
+      }
+    },
   },
   getters: {
     cars: (state) => state.cars,
     carDetails: (state) => state.carDetails,
+    postDetails: (state) => state.postDetails,
     isLoading: (state) => state.isLoading,
   },
 })

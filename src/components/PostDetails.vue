@@ -1,25 +1,18 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import { useStore } from 'vuex'
 
-const post = ref(null)
-const isLoading = ref(true)
+const store = useStore()
 
-const fetchPostDetails = async () => {
-  const postId = useRoute().params.id // Получаем ID поста из параметра маршрута
-  try {
-    const response = await axios.get(`http://am111.05.testing.place/api/v1/post/${postId}`)
-    post.value = response.data.post
-    post.value.comments = response.data.comments
-    isLoading.value = false
-  } catch (error) {
-    console.error('Error fetching post details:', error)
-  }
-}
+const post = computed(() => store.getters.postDetails);
+
+const isLoading = computed(() => store.getters.isLoading);
 
 onMounted(() => {
-  fetchPostDetails()
+  const postId = useRoute().params.id // Получаем ID поста из параметра маршрута
+  store.dispatch('fetchPostDetails', postId)
 })
 </script>
 
@@ -39,7 +32,7 @@ onMounted(() => {
               <line x1="16" y1="12" x2="8" y2="12"></line>
             </svg>
           </button>
-          <h1>{{ post?.title }}</h1>
+          <h1>{{ post?.user.main_auto_name }}</h1>
           <button class="menu-button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal">
               <circle cx="12" cy="12" r="1"></circle>
@@ -57,8 +50,8 @@ onMounted(() => {
           <div class="post-seller">
             <img :src="post?.user.avatar.url" :alt="post?.user.username" class="seller-avatar">
             <div class="seller-info">
-              <p class="seller-nickname">{{ post?.user.username }}</p>
-              <p class="post-car-model">{{ post?.model }}</p>
+              <span class="seller-nickname">{{ post?.user.username }}</span>
+              <span class="post-car-model">{{ post?.user.main_auto_name }}</span>
             </div>
           </div>
 
@@ -69,7 +62,7 @@ onMounted(() => {
 
           <!-- Автомобильный рынок -->
           <div class="post-market">
-            <p>{{ post?.marketName }}</p>
+            <p>{{ post?.main }}</p>
           </div>
         </div>
 
@@ -95,15 +88,16 @@ onMounted(() => {
         </div>
         <!-- Список комментариев -->
         <div class="comments-list">
-          <div v-for="comment in post?.comments" :key="comment.id" class="comment-item">
-            <div class="comment-author">
-              <img :src="comment.user.avatar.url" :alt="comment.user.username" class="comment-avatar">
-              <div class="comment-info">
-                <p class="comment-author-name">{{ comment.user.username }}</p>
-                <p class="comment-date">{{ comment.created_at }}</p>
+          <div v-for="comment in post?.comments" :key="comment.id" class="comment-card">
+            <img :src="comment.user.avatar.url" alt="User Avatar" class="avatar" />
+            <div class="comment-content">
+              <div class="comment-header">
+                <span class="username">{{ comment.user.username }}</span>
+                <span class="comment-date">{{ comment.created_at }}</span>
               </div>
+              <p class="car-model">{{ comment.user.main_auto_name }}</p>
+              <p class="comment-text">{{ comment.text }}</p>
             </div>
-            <p class="comment-text">{{ comment.text }}</p>
           </div>
         </div>
         <!-- Блок авторизации для комментирования -->
@@ -219,11 +213,6 @@ onMounted(() => {
   color: #777;
 }
 
-.comment-text {
-  margin-top: 5px;
-  font-size: 14px;
-}
-
 .login-for-comments {
   padding: 20px;
   text-align: center;
@@ -248,5 +237,54 @@ onMounted(() => {
 
 .login-for-comments button:hover {
   background-color: #0056b3;
+}
+
+.comment-card {
+  display: flex;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.car-model {
+  font-size: 14px;
+  color: #666;
+  margin: 4px 0;
+}
+
+.comment-text {
+  margin: 0;
+  text-align: left;
+}
+
+.seller-nickname {
+  font-weight: bold;
+  color: #333;
 }
 </style>
