@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import { useStore } from 'vuex'
+import formatDate from '../utils/date'
 
 const store = useStore()
 
@@ -12,17 +13,6 @@ const isLoading = computed(() => store.getters.isLoading);
 
 const openMenu = () => {
   // TODO: Здесь можно реализовать логику для меню
-}
-
-const fetchCarDetails = async () => {
-  const carId = useRoute().params.id // Получаем ID машины из параметра маршрута
-  try {
-    const response = await axios.get(`http://am111.05.testing.place/api/v1/car/${carId}`)
-    entity.value.car = response.data.car // Предполагается, что данные машины находятся в response.data.data
-    entity.value.seller = response.data.user // Предполагается, что данные машины находятся в response.data.data
-  } catch (error) {
-    console.error('Error fetching car details:', error)
-  }
 }
 
 onMounted(() => {
@@ -101,21 +91,21 @@ onMounted(() => {
               </div>
             </div>
             <div class="post-footer">
-              <div class="post-info">
-                <span class="post-date">{{ post.created_at }}</span>
-              </div>
               <div class="post-actions">
                 <div class="post-comments">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle">
                     <path d="M21 11.5a8.38 8.38 0 0 1-1.3 4.4 8.5 8.5 0 0 1-7.7 4.6 8.38 8.38 0 0 1-4.4-1.3L3 21l1.8-4.6a8.38 8.38 0 0 1-1.3-4.4 8.5 8.5 0 0 1 4.6-7.7 8.38 8.38 0 0 1 4.4-1.3 8.5 8.5 0 0 1 8.5 8.5z"></path>
                   </svg>
                   <span>{{ post.comment_count }} Комментариев</span>
                 </div>
                 <div class="post-likes">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="feather feather-heart-filled">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" class="feather feather-heart-filled">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
                   </svg>
                   <span>{{ post.like_count }} Лайков</span>
+                </div>
+                <div class="post-likes">
+                  <span>{{ post?.created_at ? formatDate(new Date(post.created_at)) : '' }}</span>
                 </div>
               </div>
             </div>
@@ -214,12 +204,6 @@ onMounted(() => {
   border: 1px solid #ddd;
 }
 
-.post-text {
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 10px;
-}
-
 .post-footer {
   display: flex;
   justify-content: space-between;
@@ -254,5 +238,9 @@ onMounted(() => {
 .post-seller-name {
   font-weight: bold;
   margin: 0;
+}
+
+.post-link {
+  text-decoration: none;
 }
 </style>

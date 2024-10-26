@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import { useStore } from 'vuex'
+import formatDate from '../utils/date'
 
 const store = useStore()
 
@@ -82,7 +83,7 @@ onMounted(() => {
               <span>{{ post?.like_count }} Лайков</span>
             </div>
             <div class="post-likes">
-              <span>{{ post?.created_at }}</span>
+              <span>{{ post?.created_at ? formatDate(new Date(post?.created_at)) : '' }}</span>
             </div>
           </div>
         </div>
@@ -93,7 +94,7 @@ onMounted(() => {
             <div class="comment-content">
               <div class="comment-header">
                 <span class="username">{{ comment.user.username }}</span>
-                <span class="comment-date">{{ comment.created_at }}</span>
+                <span class="comment-date">{{ formatDate(new Date(comment.created_at)) }}</span>
               </div>
               <p class="car-model">{{ comment.user.main_auto_name }}</p>
               <p class="comment-text">{{ comment.text }}</p>
