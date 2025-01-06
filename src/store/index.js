@@ -36,7 +36,12 @@ export default createStore({
     async fetchCarDetails({ commit }, carId) {
       commit('SET_LOADING', true)
       try {
-        const response = await axios.get(`http://am111.05.testing.place/api/v1/car/${carId}`)
+        const response = await axios.get(`http://am111.05.testing.place/api/v1/car/${carId}`, {
+          headers: {
+            referer: 'https://fantastic-accessible-snowflake.glitch.me',
+            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+          }
+        })
         commit('SET_CAR_DETAILS', {
           car: response.data.car,
           seller: response.data.user,
@@ -49,7 +54,12 @@ export default createStore({
     async fetchCarPosts({ state, commit }, carId) {
       commit('SET_LOADING', true)
       try {
-        const response = await axios.get(`http://am111.05.testing.place/api/v1/car/${carId}/posts`)
+        const response = await axios.get(`http://am111.05.testing.place/api/v1/car/${carId}/posts`, {
+          headers: {
+            referer: 'https://fantastic-accessible-snowflake.glitch.me',
+            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+          }
+        })
         commit('SET_CAR_DETAILS', {
           ...state.carDetails,
           car: {
@@ -65,7 +75,12 @@ export default createStore({
     async fetchPostDetails({ commit }, postId) {
       commit('SET_LOADING', true);
       try {
-        const response = await axios.get(`http://am111.05.testing.place/api/v1/post/${postId}`);
+        const response = await axios.get(`http://am111.05.testing.place/api/v1/post/${postId}`, {
+          headers: {
+            'Referer': 'https://fantastic-accessible-snowflake.glitch.me',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
+          }
+        });
         commit('SET_POST_DETAILS', {
           ...response.data.post,
           comments: response.data.comments,
